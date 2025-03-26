@@ -1,5 +1,5 @@
 # Include the libraries for socket and system calls
-import socket
+from socket import *
 import sys
 import os
 import argparse
@@ -16,10 +16,17 @@ args = parser.parse_args()
 proxyHost = args.hostname
 proxyPort = int(args.port)
 
+
+
 # Create a server socket, bind it to a port and start listening
 try:
   # Create a server socket
   # ~~~~ INSERT CODE ~~~~
+  serverPort = 12000
+  serverSocket = socket(AF_INET,SOCK_STREAM) #Use IP4 and TCP
+  serverSocket.bind(('',serverPort)) # ''means any IP address, but port serverPort
+  serverSocket.listen(1)
+  print ('The server is ready to receive')
   # ~~~~ END CODE INSERT ~~~~
   print ('Created socket')
 except:
