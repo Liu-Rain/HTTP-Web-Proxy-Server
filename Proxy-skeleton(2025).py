@@ -133,7 +133,7 @@ while True:
     # Create a socket to connect to origin server
     # and store in originServerSocket
     # ~~~~ INSERT CODE ~~~~
-    serverToOriginSocket = socket(AF_INET,SOCK_STREAM)
+    originServerSocket = socket(AF_INET,SOCK_STREAM)
     # ~~~~ END CODE INSERT ~~~~
 
     print ('Connecting to:\t\t' + hostname + '\n')
@@ -153,6 +153,8 @@ while True:
       # originServerRequest is the first line in the request and
       # originServerRequestHeader is the second line in the request
       # ~~~~ INSERT CODE ~~~~
+      originServerRequest = f"{method} {URI} {version}\r\n"
+      originServerRequestHeader = requestParts[3] #***this might be wrong
       # ~~~~ END CODE INSERT ~~~~
 
       # Construct the request to send to the origin server
