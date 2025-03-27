@@ -22,7 +22,6 @@ proxyPort = int(args.port)
 try:
   # Create a server socket
   # ~~~~ INSERT CODE ~~~~
-  serverPort = 12000
   serverSocket = socket(AF_INET,SOCK_STREAM) #Use IP4 and TCP
   # ~~~~ END CODE INSERT ~~~~
   print ('Created socket')
@@ -33,7 +32,7 @@ except:
 try:
   # Bind the the server socket to a host and port
   # ~~~~ INSERT CODE ~~~~
-  serverSocket.bind(('',serverPort)) # ''means any IP address, but port serverPort
+  serverSocket.bind((proxyHost,proxyPort)) # ''means any IP address, but port serverPort
   # ~~~~ END CODE INSERT ~~~~
   print ('Port is bound')
 except:
@@ -96,12 +95,12 @@ while True:
 
   # Split hostname from resource name
   resourceParts = URI.split('/', 1)
-  hostname = resourceParts[0]
+  hostname = resourceParts[0] 
   resource = '/'
 
   if len(resourceParts) == 2:
     # Resource is absolute URI with hostname and resource
-    resource = resource + resourceParts[1]
+    resource = resource + resourceParts[1] #***check if this is right
 
   print ('Requested Resource:\t' + resource)
 
@@ -123,6 +122,7 @@ while True:
     # ProxyServer finds a cache hit
     # Send back response to client 
     # ~~~~ INSERT CODE ~~~~
+    connectionSocket.send(cacheData)
     # ~~~~ END CODE INSERT ~~~~
     cacheFile.close()
     print ('Sent to the client:')
@@ -133,6 +133,7 @@ while True:
     # Create a socket to connect to origin server
     # and store in originServerSocket
     # ~~~~ INSERT CODE ~~~~
+    serverToOriginSocket = socket(AF_INET,SOCK_STREAM)
     # ~~~~ END CODE INSERT ~~~~
 
     print ('Connecting to:\t\t' + hostname + '\n')
@@ -141,6 +142,7 @@ while True:
       address = socket.gethostbyname(hostname)
       # Connect to the origin server
       # ~~~~ INSERT CODE ~~~~
+      originServerSocket.connect((address,80))
       # ~~~~ END CODE INSERT ~~~~
       print ('Connected to origin Server')
 
