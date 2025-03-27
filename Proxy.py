@@ -75,7 +75,7 @@ while True:
   print ('Received request:')
   print ('< ' + message)
 
-  # Extract the method, URI and version of the HTTP client request 
+  # Extract the method, URI and version of the HTTP client request
   requestParts = message.split()
   method = requestParts[0]
   URI = requestParts[1]
@@ -143,6 +143,7 @@ while True:
       address = socket.gethostbyname(hostname)
       # Connect to the origin server
       # ~~~~ INSERT CODE ~~~~
+      print("address is :" + address)
       originServerSocket.connect((address,80))
       # ~~~~ END CODE INSERT ~~~~
       print ('Connected to origin Server')
@@ -154,9 +155,12 @@ while True:
       # originServerRequest is the first line in the request and
       # originServerRequestHeader is the second line in the request
       # ~~~~ INSERT CODE ~~~~
-      originServerRequest = f"{method} {URI} {version}"
-      for i in requestParts[2:]:
-        originServerRequestHeader += f'{i}\r\n'#***this might be wrong
+      originServerRequest = f"{method} {resource} {version}"
+      for i in requestParts[3:]:
+        if i.endswith(":"):
+          originServerRequestHeader += f'{i}'#***this might be wrong
+        else:
+          originServerRequestHeader += f' {i}\r\n'
       # ~~~~ END CODE INSERT ~~~~
 
       # Construct the request to send to the origin server
