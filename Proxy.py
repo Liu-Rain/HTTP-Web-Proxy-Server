@@ -69,7 +69,7 @@ while True:
   # Get HTTP request from client
   # and store it in the variable: message_bytes
   # ~~~~ INSERT CODE ~~~~
-  message_bytes = clientSocket.recv(1024)
+  message_bytes = clientSocket.recv(4096)
   # ~~~~ END CODE INSERT ~~~~
   message = message_bytes.decode('utf-8')
   print ('Received request:')
@@ -143,7 +143,6 @@ while True:
       address = socket.gethostbyname(hostname)
       # Connect to the origin server
       # ~~~~ INSERT CODE ~~~~
-      print("address is :" + address)
       originServerSocket.connect((address,80))
       # ~~~~ END CODE INSERT ~~~~
       print ('Connected to origin Server')
@@ -156,7 +155,8 @@ while True:
       # originServerRequestHeader is the second line in the request
       # ~~~~ INSERT CODE ~~~~
       originServerRequest = f"{method} {resource} {version}"
-      for i in requestParts[3:]:
+      originServerRequestHeader = f"Host: {hostname}\r\n"
+      for i in requestParts[5:]:
         if i.endswith(":"):
           originServerRequestHeader += f'{i}'#***this might be wrong
         else:
@@ -181,7 +181,7 @@ while True:
 
       # Get the response from the origin server
       # ~~~~ INSERT CODE ~~~~
-      originResponse = originServerSocket.recv(1024)
+      originResponse = originServerSocket.recv(4096)
       # ~~~~ END CODE INSERT ~~~~
 
       # Send the response to the client
