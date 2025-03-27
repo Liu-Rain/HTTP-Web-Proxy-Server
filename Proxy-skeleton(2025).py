@@ -60,7 +60,7 @@ while True:
   try:
     # ~~~~ INSERT CODE ~~~~
     connectionSocket, addr = serverSocket.accept()
-    
+
     # ~~~~ END CODE INSERT ~~~~
     print ('Received a connection')
   except:
@@ -70,6 +70,7 @@ while True:
   # Get HTTP request from client
   # and store it in the variable: message_bytes
   # ~~~~ INSERT CODE ~~~~
+  message_bytes = connectionSocket.recv(1024)
   # ~~~~ END CODE INSERT ~~~~
   message = message_bytes.decode('utf-8')
   print ('Received request:')
