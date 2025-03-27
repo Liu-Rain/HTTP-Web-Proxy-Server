@@ -1,5 +1,6 @@
 # Include the libraries for socket and system calls
-from socket import *
+
+import socket
 import sys
 import os
 import argparse
@@ -22,7 +23,7 @@ proxyPort = int(args.port)
 try:
   # Create a server socket
   # ~~~~ INSERT CODE ~~~~
-  serverSocket = socket(AF_INET,SOCK_STREAM) #Use IP4 and TCP
+  serverSocket = socket.socket(socket.AF_INET,socket.SOCK_STREAM) #Use IP4 and TCP
   # ~~~~ END CODE INSERT ~~~~
   print ('Created socket')
 except:
@@ -58,8 +59,7 @@ while True:
   # Accept connection from client and store in the clientSocket
   try:
     # ~~~~ INSERT CODE ~~~~
-    connectionSocket, addr = serverSocket.accept()
-
+    clientSocket, addr = serverSocket.accept()
     # ~~~~ END CODE INSERT ~~~~
     print ('Received a connection')
   except:
@@ -69,7 +69,7 @@ while True:
   # Get HTTP request from client
   # and store it in the variable: message_bytes
   # ~~~~ INSERT CODE ~~~~
-  message_bytes = connectionSocket.recv(1024)
+  message_bytes = clientSocket.recv(1024)
   # ~~~~ END CODE INSERT ~~~~
   message = message_bytes.decode('utf-8')
   print ('Received request:')
@@ -122,7 +122,8 @@ while True:
     # ProxyServer finds a cache hit
     # Send back response to client 
     # ~~~~ INSERT CODE ~~~~
-    connectionSocket.send(cacheData)
+    cacheData = ''.join(cacheData)
+    clientSocket.send(cacheData.encode('utf-8'))
     # ~~~~ END CODE INSERT ~~~~
     cacheFile.close()
     print ('Sent to the client:')
@@ -133,7 +134,7 @@ while True:
     # Create a socket to connect to origin server
     # and store in originServerSocket
     # ~~~~ INSERT CODE ~~~~
-    originServerSocket = socket(AF_INET,SOCK_STREAM)
+    originServerSocket = socket.socket(socket.AF_INET,socket.SOCK_STREAM)
     # ~~~~ END CODE INSERT ~~~~
 
     print ('Connecting to:\t\t' + hostname + '\n')
@@ -154,11 +155,12 @@ while True:
       # originServerRequestHeader is the second line in the request
       # ~~~~ INSERT CODE ~~~~
       originServerRequest = f"{method} {URI} {version}"
-      originServerRequestHeader = requestParts[2:] #***this might be wrong
+      for i in requestParts[2:]:
+        originServerRequestHeader += f'{i}\r\n'#***this might be wrong
       # ~~~~ END CODE INSERT ~~~~
 
       # Construct the request to send to the origin server
-      request = originServerRequest + '\r\n' + originServerRequestHeader + '\r\n\r\n'
+      request = originServerRequest + '\r\n' + originServerRequestHeader + '\r\n'
 
       # Request the web resource from origin server
       print ('Forwarding request to origin server:')
@@ -180,7 +182,7 @@ while True:
 
       # Send the response to the client
       # ~~~~ INSERT CODE ~~~~
-      connectionSocket.send(originResponse)
+      clientSocket.send(originResponse)
       # ~~~~ END CODE INSERT ~~~~
 
       # Create a new file in the cache for the requested file.
