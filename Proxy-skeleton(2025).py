@@ -24,9 +24,6 @@ try:
   # ~~~~ INSERT CODE ~~~~
   serverPort = 12000
   serverSocket = socket(AF_INET,SOCK_STREAM) #Use IP4 and TCP
-  serverSocket.bind(('',serverPort)) # ''means any IP address, but port serverPort
-  serverSocket.listen(1)
-  print ('The server is ready to receive')
   # ~~~~ END CODE INSERT ~~~~
   print ('Created socket')
 except:
@@ -36,6 +33,7 @@ except:
 try:
   # Bind the the server socket to a host and port
   # ~~~~ INSERT CODE ~~~~
+  serverSocket.bind(('',serverPort)) # ''means any IP address, but port serverPort
   # ~~~~ END CODE INSERT ~~~~
   print ('Port is bound')
 except:
@@ -45,6 +43,8 @@ except:
 try:
   # Listen on the server socket
   # ~~~~ INSERT CODE ~~~~
+  serverSocket.listen(1)
+  print ('The server is ready to receive')
   # ~~~~ END CODE INSERT ~~~~
   print ('Listening to socket')
 except:
